@@ -1,3 +1,23 @@
-.content {
+.content { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
     margin: 0; 
+}
+
+
+
+
+ul li {
+    list-style: none; 
+    padding: 55px 60px 5px 30px; 
+    margin: 20px; 
+    overflow-x: scroll; /* horizontal scroll */ 
+    white-space: nowrap; /* content stays in one line */
+    background-color: rgb(129, 249, 129); 
+    width: 100px; 
+    height: 100px; 
+    border: 2px solid gray; 
+    box-shadow: 5px 10px rgb(174, 174, 174);
 }
