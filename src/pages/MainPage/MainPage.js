@@ -6,6 +6,7 @@ import Footer from '../../components/Footer/Footer'
 
 function MainPage() { 
 
+  // Get all to do list items
   const [data, setData] = useState([]);
     useEffect(() => {
         const fetchAPI = async () => {
@@ -20,13 +21,35 @@ function MainPage() {
 
 
 
+    // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5; 
+    const itemsPerPage = 3; 
     const totalPages = Math.ceil(data.length / itemsPerPage);
     const displayedItems = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
 
+
+    // Add item to to do list
     
+    const [add, setAdd] = useState([]);
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+              method: 'POST',
+              body: JSON.stringify({
+                title: 'foo',
+                body: 'bar',
+                userId: 1,
+              }),
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            }).catch((err) => ('Error', console.error(err)));
+            const result = await response.json();
+            setData(result);
+        };
+        fetchAPI();
+    }, []);
     
 
   return ( 
@@ -38,9 +61,16 @@ function MainPage() {
                 {displayedItems.map(item => (
                     <li key={item.id}>{item.title}</li>
                 ))} 
-            </ul>
+            </ul> 
+      
             <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
           </div> 
+
+          
+          <span className='totalPages'>Pages total: {totalPages}</span>
+         
+            
+          
 
       
         </div> 
