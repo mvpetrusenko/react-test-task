@@ -9,7 +9,7 @@ function Header() {
   return (
     <header className="sticky">
         <div> 
-          <Link to="/"><img src={todolist} alt="ToDoList" className="todolist" /></Link>
+          <Link to="/"><img src={todolist} alt="ToDoList" className="todolistImage" /></Link>
           <h1 style={{ fontFamily: 'cursive', textAlign: 'center' }}>
             To Do List
           </h1> 

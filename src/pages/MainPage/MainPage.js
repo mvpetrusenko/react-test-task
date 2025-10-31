@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../MainPage/MainPage.css' 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
+import { faCaretSquareLeft, faCaretSquareRight, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import Header from '../../components/Header/Header'
 import Pagination from '../../components/Pagination/Pagination'
@@ -30,9 +30,11 @@ function MainPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3; 
     const totalPages = Math.ceil(tasks.length / itemsPerPage);
+    //const totalPages = Math.ceil(tasks.length / itemsPerPage);
     const displayedItems = tasks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    
 
-
+    console.log(displayedItems)
 
     useEffect(() => {
         const fetchAPI = async () => {
@@ -211,10 +213,31 @@ function MainPage() {
               </ul> 
             </div>
       
-            <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
+            <div className='navigation-btn'>
+              <FontAwesomeIcon
+                  className="prev-btn"
+                  icon={faCaretSquareLeft}
+                  onClick={() => 
+                    setCurrentPage(currentPage - 1)}
+                  />
+                <FontAwesomeIcon
+                  className="next-btn"
+                  icon={faCaretSquareRight}
+                  onClick={() => 
+                    setCurrentPage(currentPage + 1)}
+                  />
+            </div>
+            
+            <Pagination  currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={setCurrentPage} />
           
           </div> 
 
+
+          {/* {typeof totalPages} - number */}
+          {/* { typeof [...Array(totalPages)]} - object */} 
+        
           
           <span className='totalPages'>Pages total: {totalPages}</span>
          

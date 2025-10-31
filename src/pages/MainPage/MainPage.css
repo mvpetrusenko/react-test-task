@@ -104,6 +104,21 @@ ul li {
 }
 
 
+.navigation-btn {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    width: 150px;
+    height: 5px; 
+    margin: -10px;
+}
+
+
+.prev-btn .next-btn {
+    height: 200px;
+}
+
+
 .totalPages {
     background-color: rgb(231, 227, 220); 
     border: 2px solid rgb(143, 140, 140);

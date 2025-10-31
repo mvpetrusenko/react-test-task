@@ -22,7 +22,9 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
 
                 </button>
 
-            ))}
+                
+
+            )).slice(0,3)}
 
         </div>
 
