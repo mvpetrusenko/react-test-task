@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Header/Header.css'
-import todolist from '../../assets/images/todolist.png'; 
+import todolist from '../../assets/images/todolist.svg'; 
 
 
 

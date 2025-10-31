@@ -7,7 +7,12 @@ import Header from '../../components/Header/Header'
 import Pagination from '../../components/Pagination/Pagination'
 import Footer from '../../components/Footer/Footer'
 
-function MainPage(props) { 
+
+
+
+function MainPage() { 
+
+  
 
   // Get all to do list items
   const [tasks, setTasks] = useState([]);
@@ -66,11 +71,12 @@ function MainPage(props) {
 
 
 
+    // Adding Task
     const addTask = async (e) => {
-    e.preventDefault();
-    fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-      body: JSON.stringify({
+     e.preventDefault();
+     fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        body: JSON.stringify({
         title: taskTitle,
         completed:false,
       }),
@@ -92,83 +98,78 @@ function MainPage(props) {
   };
 
 
+
+  const clearInput = () => {
+    const inputField = document.getElementById('task-title-input').value = '';
+  }
+
     
   // Editing Task and Updating 
-  const[currentEdit, setCurrentEdit] = useState(''); 
   const ref = useRef();
 
-  const editTask = (e) => {
+  const editTask = (id) => {
     // e.preventDefault();
 
-    fetch(`https://jsonplaceholder.typicode.com/posts/1`, {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
       method: "PUT",
       body: JSON.stringify({
         id: 1,
-        //title: editData.title,
+        //title: editedTitle,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => response.json())
-      .then((json) => {
-        let updatedTasks = tasks.map((task) => {
-          // if this task has the same ID as the edited task
-          //if (task.id === editData.id) {
-            // Copy the task and update its name
-            //return editData;
-          //}
-          // Return the original task if it's not the edited task
-          return task;
-        });
-        // Update localStorage with the updatedTasks array
-        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-        // Retrieve and parse the data from localStorage
-        const updatedTasksFromLocalStorage = JSON.parse(
-          localStorage.getItem("tasks")
-        );
-        // Update the tasks state with the parsed data
-        setTasks(updatedTasksFromLocalStorage);
-      })
-      .catch((err) => {
-        console.log("Error Editing Task");
-  
+      .then(() => {
+        let updatedTask = tasks.filter((task)=>task.id === id);
+        localStorage.setItem("tasks", JSON.stringify(updatedTask));
+        setTasks(JSON.parse(localStorage.getItem('tasks')))
       });
   };
 
 
   return ( 
+    // Using Context API for data transfer
+    
+
     <div>
         {<Header />}
         <div className="content"> 
 
-         <h3>Create New Task</h3>
-        <form action="" onSubmit={addTask} className="addTask-form">
+        <div className='createTask'>
+          <h3>Create New Task</h3>
+          <form action="" onSubmit={addTask} className="addTask-form">
           <div className="task-input">
-            <label htmlFor="task-title-input">Task Title</label>
+            {/* <label htmlFor="task-title-input">Task Title:  </label> */}
             <input 
               id="task-title-input" 
-              ref={ref}
+              // ref={ref}
               type="text"
-              placeholder="Eg. Complete Assignment"
+              placeholder="   Your Task Title"
               value={taskTitle}
               onChange={(e) => {
                 setTaskTitle(e.target.value);
               }}
               required
             />
-          </div> 
-          <button type="submit" className="create-task-btn">
-              Create Task
-          </button>
+          </div>
+          <div className='form-buttons'></div>
+          
           <div className="box-btn">
-            
-            
+            <button type="submit" className="create-task-btn">
+              Create Task
+            </button>
+            <button  className="clear-input-btn" onClick={clearInput}>
+              Cancel
+            </button>
           </div>
 
           
 
           </form>
+        </div>
+         
 
           <div className='toDoList'>
             <div className='task'>
@@ -179,7 +180,8 @@ function MainPage(props) {
                   icon={faPenToSquare}
                   onClick={() => {
                     //editTask(item.id);
-                    ref.current.focus()
+                    // ref.current.focus(); 
+                    
                   }}
                   /><FontAwesomeIcon
                 className="destroy-task"
@@ -210,6 +212,7 @@ function MainPage(props) {
             </div>
       
             <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
+          
           </div> 
 
           
@@ -223,8 +226,10 @@ function MainPage(props) {
         {<Footer />}
       
     </div>
+    
+
   );
 }
 
 
-export default MainPage;
+export default MainPage; 
