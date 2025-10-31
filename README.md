@@ -1,6 +1,33 @@
-# Getting Started with Create React App
+# Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The React ToDoList App is a task management application designed to help you stay organized and productive. It provides a visually appealing user interface, along with a range of features to enhance your task management experience.
+
+## For API Calls
+
+https://jsonplaceholder.typicode.com/todos
+
+## Features
+
+1. Create Task
+2. Edit Task
+3. Delete Task
+4. Clear Input Field
+5. Pagination
+6. Pages Total Count
+
+## Hosted Link
+
+https://react-test-task-swart.vercel.app/
+
+## Getting Started with Create React App
+
+This project was bootstrapped with Create React App.
+
+## Installing Dependencies
+
+1. npm i @fortawesome/free-regular-svg-icons
+2. npm i @fortawesome/react-fontawesome
+3. npm i react-router-dom
 
 ## Available Scripts
 
