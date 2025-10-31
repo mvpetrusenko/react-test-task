@@ -12,6 +12,7 @@
     flex-direction: column; 
     align-items: center; 
     justify-content: center;
+    
 }
 
 
@@ -23,7 +24,7 @@ ul li {
     overflow-x: scroll; /* horizontal scroll */ 
     white-space: nowrap; /* content stays in one line */
     background-color: rgb(129, 249, 129); 
-    width: 100px; 
+    width: 300px; 
     height: 100px; 
     border: 2px solid gray; 
     box-shadow: 10px 10px rgb(174, 174, 174, 0.7);
@@ -41,6 +42,56 @@ ul li {
     
 } 
 
-.right {
-    float: right;
+.task {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  box-sizing: border-box;
+  /* padding: 8px; */
+  min-height: 60px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border-left: 10px solid var(--primary-color); */
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.task:hover{
+    background-color: white;
+    transition: all 0.3s;
+}
+
+
+.box-btn{
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-right: 20px;
+}
+
+.create-task-btn{
+    width: 100px;
+    height: 35px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid rgb(0, 174, 255);
+}
+
+
+.edit-del-icons{
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-right: 20px;
+}
+.destroy-task{
+  color: red;
+}
+.edit-task{
+  color: rgb(45, 152, 224);
 }
