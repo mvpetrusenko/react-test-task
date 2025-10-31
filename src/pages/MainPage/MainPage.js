@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../MainPage/MainPage.css' 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
@@ -7,14 +7,13 @@ import Header from '../../components/Header/Header'
 import Pagination from '../../components/Pagination/Pagination'
 import Footer from '../../components/Footer/Footer'
 
-function MainPage() { 
+function MainPage(props) { 
 
   // Get all to do list items
   const [tasks, setTasks] = useState([]);
 
 
   const [taskTitle, setTaskTitle] = useState("");
-  const [taskBox, setTaskBox] = useState("");
 
 
   // Setting Data to Local Storage
@@ -91,7 +90,52 @@ function MainPage() {
         console.log("Error Creating Task!")
       })
   };
+
+
     
+  // Editing Task and Updating 
+  const[currentEdit, setCurrentEdit] = useState(''); 
+  const ref = useRef();
+
+  const editTask = (e) => {
+    // e.preventDefault();
+
+    fetch(`https://jsonplaceholder.typicode.com/posts/1`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: 1,
+        //title: editData.title,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let updatedTasks = tasks.map((task) => {
+          // if this task has the same ID as the edited task
+          //if (task.id === editData.id) {
+            // Copy the task and update its name
+            //return editData;
+          //}
+          // Return the original task if it's not the edited task
+          return task;
+        });
+        // Update localStorage with the updatedTasks array
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+        // Retrieve and parse the data from localStorage
+        const updatedTasksFromLocalStorage = JSON.parse(
+          localStorage.getItem("tasks")
+        );
+        // Update the tasks state with the parsed data
+        setTasks(updatedTasksFromLocalStorage);
+      })
+      .catch((err) => {
+        console.log("Error Editing Task");
+  
+      });
+  };
+
 
   return ( 
     <div>
@@ -102,8 +146,9 @@ function MainPage() {
         <form action="" onSubmit={addTask} className="addTask-form">
           <div className="task-input">
             <label htmlFor="task-title-input">Task Title</label>
-            <input
-              id="task-title-input"
+            <input 
+              id="task-title-input" 
+              ref={ref}
               type="text"
               placeholder="Eg. Complete Assignment"
               value={taskTitle}
@@ -132,9 +177,10 @@ function MainPage() {
                     <li key={item.id}><FontAwesomeIcon
                   className="edit-task"
                   icon={faPenToSquare}
-                  // onClick={() => {
-                  //   editTaskBox(value.id);
-                  // }}
+                  onClick={() => {
+                    //editTask(item.id);
+                    ref.current.focus()
+                  }}
                   /><FontAwesomeIcon
                 className="destroy-task"
                 icon={faTrashAlt}
