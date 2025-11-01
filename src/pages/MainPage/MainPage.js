@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../MainPage/MainPage.css' 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretSquareLeft, faCaretSquareRight, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import Header from '../../components/Header/Header';
 import Pagination from '../../components/Pagination/Pagination';
-import AddTaskForm from '../../components/TaskForm/AddTaskForm';
-import UpdateForm from '../../components/TaskForm/UpdateForm';
 import Footer from '../../components/Footer/Footer';
 
 
@@ -14,14 +12,9 @@ import Footer from '../../components/Footer/Footer';
 
 function MainPage() { 
 
-  
-
   // Get all to do list items
   const [tasks, setTasks] = useState([]);
-
-
   const [taskTitle, setTaskTitle] = useState("");
-
 
   // Setting Data to Local Storage
   const setDataToLocalStorage = (data) => {
@@ -32,10 +25,8 @@ function MainPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3; 
     const totalPages = Math.ceil(tasks.length / itemsPerPage);
-    //const totalPages = Math.ceil(tasks.length / itemsPerPage);
     const displayedItems = tasks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     
-
     console.log(displayedItems)
 
     useEffect(() => {
@@ -51,7 +42,7 @@ function MainPage() {
         console.log("Error Fetching Tasks From API!", error);
       }
     };
-    // Storing Task in LOcal storage, if Doesnt exists then creating
+    // Storing Task in LOcal storage, if does not exists then creating
     const storedTasks = JSON.parse(localStorage.getItem("tasks"))
     if (storedTasks && storedTasks.length>0) {
       setTasks(storedTasks);
@@ -61,12 +52,7 @@ function MainPage() {
   }, []);
 
 
-  
-
-
     // Adding Task
-    // const[newTask, setNewTask] = useState(''); 
-
     const addTask = async (e) => {
      e.preventDefault();
      fetch("https://jsonplaceholder.typicode.com/posts", {
@@ -82,9 +68,7 @@ function MainPage() {
       .then((response) => response.json())
        .then((newTask) => {
         newTask.id = Date.now();
-        // newTask.title = newTask;
         const updatedTasks = [newTask, ...tasks];
-        // setNewTask('');
         localStorage.setItem("tasks", JSON.stringify(updatedTasks));
         setTasks(updatedTasks);
         console.log("Successfully Created Task!");
@@ -101,41 +85,59 @@ function MainPage() {
 
   const clearInput = () => {
     const inputField = document.getElementById('task-title-input').value = '';
-    // document.getElementById('task-title-input').reset();
     
   }
 
 
 
-  // Cancel Update 
-
-  const cancelUpdate = () => {
-    setUpdateData('');
-  }
-
   // Change Task For Update 
 
-  const[updateData, setUpdateData] = useState(''); 
+  function createButton() {
+    let element = document.createElement("button");
+    element.appendChild(document.createTextNode("Update task"));
+    let page = document.getElementById("update-task-btn");
+    page.appendChild(element);
 
-  const changeTask = (e) => {
-    let newEntry = {
-      id: updateData.id, 
-      title: e.target.value, 
-      completed: updateData.completed ? true : false
-    }
-    setUpdateData(newEntry);
+  console.log(element);
+}
+
+  const changeTask = (id) => {
+    if(id === id) document.getElementById('task-title-input').focus(); 
+    createButton();
   }
+
+
+  // const changeTask = (e) => {
+  //   let newEntry = {
+  //     id: updateData.id, 
+  //     title: e.target.value, 
+  //     completed: updateData.completed ? true : false
+  //   }
+  //   setUpdateData(newEntry);
+  // }
 
 
   // Update Task 
+  // const[updateData, setUpdateData] = useState(''); 
 
-  const updateTask = () => {
-    let filterTasks = tasks.filter(task => task.id !== updateData.id); 
-    let UpdatedObject = [updateData, ...filterTasks]; 
-    setTasks(UpdatedObject);
-    setUpdateData('');
+  // const updateTask = (e) => {
+  //     updateData = e.target.value;
+  //     setUpdateData();
+  // }
 
-  }
+  // const updateTask = (e) => {
+  //   let newEntry = {
+  //     id: updateData.id, 
+  //     title: e.target.value, 
+  //     completed: updateData.completed ? true : false
+  //   }
+  //   setUpdateData(newEntry);
+  //   let filterTasks = tasks.filter(task => task.id !== updateData.id); 
+  //   let UpdatedObject = [updateData, ...filterTasks]; 
+  //   setTasks(UpdatedObject);
+  //   setUpdateData('');
+
+  // }
 
 
     // Deleting Task
@@ -149,32 +151,41 @@ function MainPage() {
     };
 
 
-
-    
   // Editing Task and Updating 
   // const ref = useRef();
   
 
-  const editTask = (id) => {
-    // e.preventDefault();
+  // const {
+  //   editData,
+  //   setEditData,
+  //   editBox,
+  //   setEditBox,
+  // } = props;
 
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        id: 1,
-        //title: editedTitle,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then(() => {
-        let updatedTask = tasks.filter((task)=>task.id === id);
-        localStorage.setItem("tasks", JSON.stringify(updatedTask));
-        setTasks(JSON.parse(localStorage.getItem('tasks')))
-      });
-  };
+  // let editData;
+
+  // const editTask = (id) => {
+  //   // let editData;
+  //   // e.preventDefault();
+
+  //   fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+  //     method: "PUT",
+  //     body: JSON.stringify({
+  //       id: 1,
+  //       title: editData.title,
+  //       completed: editData.completed
+  //     }),
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then(() => {
+  //       let updatedTask = tasks.filter((task)=>task.id === id);
+  //       localStorage.setItem("tasks", JSON.stringify(updatedTask));
+  //       setTasks(JSON.parse(localStorage.getItem('tasks')))
+  //     });
+  // };
 
 
   return ( 
@@ -182,49 +193,36 @@ function MainPage() {
     <div>
         {<Header />}
         <div className="content"> 
-         
-        <React.Fragment>
-            {
-              updateData && updateData ? (
-                <UpdateForm
-                  updateData={updateData}
-                  changeTask={changeTask}
-                  updateTask={updateTask}
-                  cancelUpdate={cancelUpdate}
+          <div className='createTask'>
+            <h3>Create New Task</h3>
+            <form action="" onSubmit={addTask} className="addTask-form">
+                <div className="task-input">
+                  {/* <label htmlFor="task-title-input">Task Title:  </label> */}
+                  <input 
+                      id="task-title-input" 
+                      type="text"
+                      placeholder="   Your Task Title"
+                      value={taskTitle}
+                      onChange={(e) => {
+                      setTaskTitle(e.target.value);
+                      }}
+                      required
                   />
-              ) : (
-                    <div className='createTask'>
-                    <h3>Create New Task</h3>
-                      <form action="" onSubmit={addTask} className="addTask-form">
-                        <div className="task-input">
-                          {/* <label htmlFor="task-title-input">Task Title:  </label> */}
-                            <input 
-                              id="task-title-input" 
-                              // ref={ref}
-                              type="text"
-                              placeholder="   Your Task Title"
-                              value={taskTitle}
-                              onChange={(e) => {
-                              setTaskTitle(e.target.value);
-                              }}
-                              required
-                            />
-                        </div>
+                </div>
   
-                        <div className="box-btn">
-                          <button type="submit" className="create-task-btn">
-                            Create Task
-                          </button>
-                          <button  className="clear-input-btn" onClick={clearInput}>
-                            Cancel
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-
-              )}
-
-        </React.Fragment>  
+                <div className="box-btn">
+                    <button type="submit" className="create-task-btn">
+                        Create Task
+                    </button>
+                    <button  className="clear-input-btn" onClick={clearInput}>
+                        Cancel
+                    </button>
+                    <div id="update-task-btn" 
+                    // onClick={editTask}
+                    ></div>
+                  </div>
+            </form>
+        </div>
 
 
           <div className='toDoList'>
@@ -235,9 +233,7 @@ function MainPage() {
                   className="edit-task"
                   icon={faPenToSquare}
                   onClick={() => {
-                    //editTask(item.id);
-                    // ref.current.focus(); 
-                    
+                    changeTask(item.id)
                   }}
                   /><FontAwesomeIcon
                 className="destroy-task"
@@ -246,24 +242,7 @@ function MainPage() {
                   deleteTask(item.id);
                 }}
                 />{item.title}</li>
-                ))} 
-              {/* <div className="edit-del-icons">
-                <FontAwesomeIcon
-                  className="edit-task"
-                  icon={faPenToSquare}
-                  // onClick={() => {
-                  //   editTaskBox(value.id);
-                  // }}
-                  />
-                <FontAwesomeIcon
-                className="destroy-task"
-                icon={faTrashAlt}
-                // onClick={() => {
-                //   deleteTask(task.id);
-                // }}
-                />
-              </div> */}
-               
+                ))}  
               </ul> 
             </div>
             
@@ -288,18 +267,8 @@ function MainPage() {
             onPageChange={setCurrentPage} />
           
           </div> 
-
-
-          {/* {typeof totalPages} - number */}
-          {/* { typeof [...Array(totalPages)]} - object */} 
-        
-          
+  
           <span className='totalPages'>Pages total: {totalPages}</span>
-         
-            
-          
-
-      
         </div> 
         {<Footer />}
       

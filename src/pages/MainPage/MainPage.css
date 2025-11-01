@@ -16,7 +16,6 @@
 }
 
 
-
 ul li {
     list-style: none; 
     padding: 55px 60px 5px 30px; 
@@ -29,12 +28,6 @@ ul li {
     border: 2px solid gray; 
     box-shadow: 10px 10px rgb(174, 174, 174, 0.7);
 } 
-
-
-
-
-
-
 
 
 .createTask {
