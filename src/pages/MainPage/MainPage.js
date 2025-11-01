@@ -3,9 +3,11 @@ import '../MainPage/MainPage.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretSquareLeft, faCaretSquareRight, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import Header from '../../components/Header/Header'
-import Pagination from '../../components/Pagination/Pagination'
-import Footer from '../../components/Footer/Footer'
+import Header from '../../components/Header/Header';
+import Pagination from '../../components/Pagination/Pagination';
+import AddTaskForm from '../../components/TaskForm/AddTaskForm';
+import UpdateForm from '../../components/TaskForm/UpdateForm';
+import Footer from '../../components/Footer/Footer';
 
 
 
@@ -61,19 +63,10 @@ function MainPage() {
 
   
 
-    // Deleting Task
-    const deleteTask = (id) => {
-      fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-        method: "DELETE",
-      })
-      let updatedTask = tasks.filter((task)=>task.id !== id);
-      localStorage.setItem("tasks", JSON.stringify(updatedTask));
-      setTasks(JSON.parse(localStorage.getItem('tasks')))
-    };
-
-
 
     // Adding Task
+    // const[newTask, setNewTask] = useState(''); 
+
     const addTask = async (e) => {
      e.preventDefault();
      fetch("https://jsonplaceholder.typicode.com/posts", {
@@ -87,27 +80,80 @@ function MainPage() {
       },
     })
       .then((response) => response.json())
-      .then((newTask) => {
+       .then((newTask) => {
         newTask.id = Date.now();
+        // newTask.title = newTask;
         const updatedTasks = [newTask, ...tasks];
+        // setNewTask('');
         localStorage.setItem("tasks", JSON.stringify(updatedTasks));
         setTasks(updatedTasks);
-        console.log("Successfully Created Task!")
+        console.log("Successfully Created Task!");
       })
       .catch(err=>{
         console.log("Error Creating Task!")
       })
+      setTaskTitle(''); /* clear input after submit */
+      
+      
   };
 
 
 
   const clearInput = () => {
     const inputField = document.getElementById('task-title-input').value = '';
+    // document.getElementById('task-title-input').reset();
+    
   }
+
+
+
+  // Cancel Update 
+
+  const cancelUpdate = () => {
+    setUpdateData('');
+  }
+
+  // Change Task For Update 
+
+  const[updateData, setUpdateData] = useState(''); 
+
+  const changeTask = (e) => {
+    let newEntry = {
+      id: updateData.id, 
+      title: e.target.value, 
+      completed: updateData.completed ? true : false
+    }
+    setUpdateData(newEntry);
+  }
+
+
+  // Update Task 
+
+  const updateTask = () => {
+    let filterTasks = tasks.filter(task => task.id !== updateData.id); 
+    let UpdatedObject = [updateData, ...filterTasks]; 
+    setTasks(UpdatedObject);
+    setUpdateData('');
+
+  }
+
+
+    // Deleting Task
+    const deleteTask = (id) => {
+      fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+        method: "DELETE",
+      })
+      let updatedTask = tasks.filter((task)=>task.id !== id);
+      localStorage.setItem("tasks", JSON.stringify(updatedTask));
+      setTasks(JSON.parse(localStorage.getItem('tasks')))
+    };
+
+
 
     
   // Editing Task and Updating 
-  const ref = useRef();
+  // const ref = useRef();
+  
 
   const editTask = (id) => {
     // e.preventDefault();
@@ -132,46 +178,54 @@ function MainPage() {
 
 
   return ( 
-    // Using Context API for data transfer
     
-
     <div>
         {<Header />}
         <div className="content"> 
-
-        <div className='createTask'>
-          <h3>Create New Task</h3>
-          <form action="" onSubmit={addTask} className="addTask-form">
-          <div className="task-input">
-            {/* <label htmlFor="task-title-input">Task Title:  </label> */}
-            <input 
-              id="task-title-input" 
-              // ref={ref}
-              type="text"
-              placeholder="   Your Task Title"
-              value={taskTitle}
-              onChange={(e) => {
-                setTaskTitle(e.target.value);
-              }}
-              required
-            />
-          </div>
-          <div className='form-buttons'></div>
-          
-          <div className="box-btn">
-            <button type="submit" className="create-task-btn">
-              Create Task
-            </button>
-            <button  className="clear-input-btn" onClick={clearInput}>
-              Cancel
-            </button>
-          </div>
-
-          
-
-          </form>
-        </div>
          
+        <React.Fragment>
+            {
+              updateData && updateData ? (
+                <UpdateForm
+                  updateData={updateData}
+                  changeTask={changeTask}
+                  updateTask={updateTask}
+                  cancelUpdate={cancelUpdate}
+                  />
+              ) : (
+                    <div className='createTask'>
+                    <h3>Create New Task</h3>
+                      <form action="" onSubmit={addTask} className="addTask-form">
+                        <div className="task-input">
+                          {/* <label htmlFor="task-title-input">Task Title:  </label> */}
+                            <input 
+                              id="task-title-input" 
+                              // ref={ref}
+                              type="text"
+                              placeholder="   Your Task Title"
+                              value={taskTitle}
+                              onChange={(e) => {
+                              setTaskTitle(e.target.value);
+                              }}
+                              required
+                            />
+                        </div>
+  
+                        <div className="box-btn">
+                          <button type="submit" className="create-task-btn">
+                            Create Task
+                          </button>
+                          <button  className="clear-input-btn" onClick={clearInput}>
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+
+              )}
+
+        </React.Fragment>  
+
 
           <div className='toDoList'>
             <div className='task'>
@@ -212,6 +266,7 @@ function MainPage() {
                
               </ul> 
             </div>
+            
       
             <div className='navigation-btn'>
               <FontAwesomeIcon
